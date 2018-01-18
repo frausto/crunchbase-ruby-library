@@ -153,7 +153,9 @@ module Crunchbase
         response = http.start do |h|
           h.request Net::HTTP::Get.new(uri.request_uri)
         end
-
+        
+        debug_response(response)
+        
         case response
         when Net::HTTPSuccess, Net::HTTPNotFound, Net::HTTPInternalServerError
           response.body
@@ -162,6 +164,14 @@ module Crunchbase
         else
           response.error!
         end
+      end
+
+      def debug_response(response)
+        return unless debug
+        puts '*' * 140
+        puts response.code
+        puts response.body.inspect
+        puts '*' * 140
       end
 
       def debugging(uri)
